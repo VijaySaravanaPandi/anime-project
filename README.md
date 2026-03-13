@@ -1,5 +1,5 @@
 # 🎬 AnimaStudio: Dataset-Driven Generative AI Video Engine
-### 🎓 6th Semester Generative AI Project
+this is my  6th Semester Generative AI Project done as  a part of my academic curriculum.
 
 AnimaStudio is a high-performance generative video pipeline designed to transform unstructured text narratives into stylized cinematic videos. Unlike purely diffusion-based models that are computationally expensive for long-form video, this project implements a **Retrieval-Augmented Generation (RAG)** approach for video synthesis.
 
