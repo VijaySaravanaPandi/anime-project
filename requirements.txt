@@ -1,0 +1,12 @@
+flask
+pandas
+numpy
+faiss-cpu
+sentence-transformers
+opencv-python
+moviepy
+pillow
+nltk
+torch
+torchvision
+torchaudio
