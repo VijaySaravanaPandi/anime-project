@@ -1,80 +1,73 @@
-# 🎬 AnimaStudio: AI-Powered Story-to-Video Engine
+# 🎬 AnimaStudio: Dataset-Driven Generative AI Video Engine
+### 🎓 6th Semester Generative AI Project
 
-AnimaStudio is a sophisticated generative video pipeline that transforms text-based stories into stylized cinematic animations. It combines semantic search (FAISS), natural language processing, and advanced computer vision techniques to match your narrative with real-world video datasets and apply artistic styles.
+AnimaStudio is a high-performance generative video pipeline designed to transform unstructured text narratives into stylized cinematic videos. Unlike purely diffusion-based models that are computationally expensive for long-form video, this project implements a **Retrieval-Augmented Generation (RAG)** approach for video synthesis.
 
-![AnimaStudio Banner](https://img.shields.io/badge/AnimaStudio-Creative--Engine-e91e8c?style=for-the-badge)
-![Python](https://img.shields.io/badge/Python-3.10+-3776ab?style=for-the-badge&logo=python&logoColor=white)
-![Flask](https://img.shields.io/badge/Flask-Framework-000000?style=for-the-badge&logo=flask&logoColor=white)
-
----
-
-## ✨ Features
-
-- **📖 Intelligent Story Splitting**: Automatically breaks down long stories into logically consistent scenes.
-- **🔍 Semantic Video Matching**: Uses **FAISS** and **Sentence Transformers** (CLIP-style) to find the most visually relevant clips for your story.
-- **🤖 Ollama Integration**: Optionally enhances search queries using local LLMs (like Gemma 3) for better context awareness.
-- **🎭 Artistic Stylization**: Apply "Anime", "Cartoon", "Vivid", or "Sketch" filters using OpenCV bilateral filters and color grading.
-- **💓 Emotion-Driven Grading**: Dynamically adjusts video color palettes (e.g., warmer for victory, cooler for chase) based on the sentiment of the scene.
-- **🛠️ Fully Local Pipeline**: Designed to run locally with FFmpeg and local datasets.
-
-## 🚀 Quick Start
-
-### 1. Prerequisites
-- **Python 3.10 - 3.13** (Recommended)
-- **FFmpeg**: Must be installed and accessible.
-- **Ollama** (Optional): For AI-enhanced query expansion.
-
-### 2. Installation
-```bash
-# Clone the repository
-git clone https://github.com/yourusername/anime-project.git
-cd anime-project
-
-# Create a virtual environment
-python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-
-# Install dependencies
-pip install flask pandas numpy faiss-cpu sentence-transformers opencv-python moviepy pillow nltk
-```
-
-### 3. Setup Paths
-Open `src/app.py` and ensure the paths for `BASE_PATH`, `VIDEOS_PATH`, and `FFMPEG_PATH` match your local system:
-```python
-BASE_PATH   = "C:/path/to/your/project"
-FFMPEG_PATH = "C:/path/to/ffmpeg.exe"
-```
-
-### 4. Run the Application
-```bash
-python src/app.py
-```
-Visit `http://localhost:5000` in your browser.
+![AnimaStudio Banner](https://img.shields.io/badge/Status-6th--Semester--Project-e91e8c?style=for-the-badge)
+![AI](https://img.shields.io/badge/Generative--AI-FAISS--%2B--CLIP-7c3aed?style=for-the-badge)
 
 ---
 
-## 🏗️ Architecture
-
-1. **Input**: User provides a story (e.g., "A knight enters the dark forest").
-2. **Analysis**: The engine splits the story into scenes and uses Ollama to extract visual keywords.
-3. **Retrieval**: FAISS searches the MSR-VTT dataset for the best matching video clips.
-4. **Grading**: The system detects the "emotion" of the scene and applies a color grade.
-5. **Assembly**: MoviePy stitches the clips together with smooth transitions and titles.
+## 📖 Introduction
+In the current landscape of Generative AI, creating consistent, long-duration video from text remains a challenge. AnimaStudio solves this by utilizing a massive curated dataset and a semantic search engine. It "hallucinates" a storyboard from your input and then "realizes" it by finding, grading, and stitching together high-relevance video segments.
 
 ---
 
-## 🛠️ Tech Stack
+## 📊 Dataset: MSR-VTT (Microsoft Research Video to Text)
+This project utilizes the **MSR-VTT** dataset, a large-scale benchmark for video understanding.
+- **Scale**: Contains 10,000 video clips.
+- **Richness**: Each clip is annotated with 20 natural language captions (200,000 captions total).
+- **Diversity**: Covers a wide variety of domains (sports, news, movies, cooking, etc.).
+- **Why MSR-VTT?**: It provides the ground truth mapping between visual actions and textual descriptions, making it the perfect foundation for a retrieval-based generative model.
 
-- **Backend**: Python, Flask
-- **Search Engine**: FAISS (Facebook AI Similarity Search)
-- **NLP**: Sentence-Transformers, NLTK
-- **Computer Vision**: OpenCV, Pillow
-- **Video Editing**: MoviePy, FFmpeg
+---
+
+## 🔍 How It Works: The "Semantic Bridge"
+
+### 1. The Role of Captions
+Captions are the "connectors" between your story and the pixel data. 
+- We pre-process all 200,000 captions using **Sentence-BERT (all-MiniLM-L6-v2)** to convert them into 384-dimensional dense vectors (embeddings).
+- These embeddings represent the **semantic meaning** of the video rather than just keywords.
+
+### 2. FAISS (Facebook AI Similarity Search)
+To make the generation instantaneous, we use **FAISS**. 
+- When you enter a story, the engine splits it into scene-level sentences.
+- Each sentence is converted into a vector and "queried" against the FAISS index.
+- FAISS performs an incredibly fast L2-distance search to find the clip whose caption most closely matches your story's intent.
+
+### 3. Ollama (Query Expansion)
+To bridge the gap between simple story text and detailed dataset captions, we use **Gemma 3 (via Ollama)**. The LLM expands your story sentence into a rich visual prompt (describing lighting, environment, and movement) before the search begins.
 
 ---
 
-## 📝 License
-Distributed under the MIT License. See `LICENSE` for more information.
+## 🎭 Visual Intelligence & Stylization
+Once the best clips are retrieved, the engine applies:
+- **Style Transformers**: OpenCV-based bilateral filters convert standard video into "Anime" or "Cartoon" styles.
+- **Emotion Grading**: A sentiment analysis pass detects the "mood" of the scene (e.g., Joy, Tension, Urgency) and applies custom color look-up tables (LUTs) to reinforce the narrative.
 
 ---
-*Created with ❤️ by AnimaStudio Team*
+
+## 🚀 Installation & Usage
+
+1. **Clone & Install**:
+   ```bash
+   git clone https://github.com/VijaySaravanaPandi/anime-project.git
+   cd anime-project
+   pip install -r requirements.txt
+   ```
+
+2. **Run Server**:
+   ```bash
+   python src/app.py
+   ```
+
+---
+
+## 🛠️ Technical Stack
+- **NLP**: Sentence-Transformers (CLIP-Style), NLTK, Ollama
+- **Vector DB**: FAISS
+- **Computer Vision**: OpenCV (Artistic Filters), PIL
+- **Video Processing**: MoviePy, FFmpeg
+
+---
+*Developed as a Semester project for Generative AI course.*
