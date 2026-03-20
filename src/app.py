@@ -50,17 +50,23 @@ else:
     faiss_index = None
     print("  FAISS index not found — will use NumPy fallback")
 
-with open(ANNOTATION_FILE, "r") as f:
-    raw_data = json.load(f)
-
 timestamp_lookup = {}
-for video in raw_data['images']:
-    vid_id = video['id']
-    timestamp_lookup[vid_id] = {
-        'start': video.get('start time', 0),
-        'end'  : video.get('end time', 10)
-    }
-print(f"Loaded {len(merged_df)} videos from dataset")
+try:
+    with open(ANNOTATION_FILE, "r") as f:
+        raw_data = json.load(f)
+    for video in raw_data['images']:
+        vid_id = video['id']
+        timestamp_lookup[vid_id] = {
+            'start': video.get('start time', 0),
+            'end'  : video.get('end time', 10)
+        }
+    print(f"  Annotation file loaded — {len(timestamp_lookup):,} timestamps ✓")
+except FileNotFoundError:
+    print("  ⚠  MSR_VTT.json not found — using default clip windows (0–10s)")
+except Exception as e:
+    print(f"  ⚠  Could not load annotation file: {e} — using defaults")
+
+
 
 nlp_model = None  # spaCy not used (incompatible with Python 3.14)
 
