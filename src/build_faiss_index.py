@@ -12,8 +12,8 @@ import faiss
 import time
 import os
 
-# ── Paths (adjust if needed) ──────────────────────────────────────
-BASE_PATH       = r"C:\Users\vijay\OneDrive\Desktop\anime-project"
+# ── Paths (resolved dynamically — works on any machine) ───────────
+BASE_PATH       = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 EMBEDDINGS_PATH = os.path.join(BASE_PATH, "src", "combined_embeddings.npy")
 INDEX_PATH      = os.path.join(BASE_PATH, "src", "combined_faiss.index")
 

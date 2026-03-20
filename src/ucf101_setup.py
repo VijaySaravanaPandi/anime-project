@@ -3,8 +3,10 @@ import pandas as pd
 import numpy as np
 from sentence_transformers import SentenceTransformer
 
-# Exact path based on your folder structure
-UCF101_PATH = "C:\\Users\\vijay\\OneDrive\\Desktop\\anime-project\\datasets-project\\UCF101\\UCF-101"
+# Paths — resolved dynamically so this works on any machine
+_HERE       = os.path.dirname(os.path.abspath(__file__))   # src/
+_BASE       = os.path.dirname(_HERE)                        # project root
+UCF101_PATH = os.path.join(_BASE, "datasets-project", "UCF101", "UCF-101")
 
 print("🔵 Scanning UCF101 dataset...")
 
@@ -37,7 +39,7 @@ for category in categories:
 # Save UCF101 captions
 ucf_df = pd.DataFrame(videos)
 ucf_df.to_csv(
-    "C:\\Users\\vijay\\OneDrive\\Desktop\\anime-project\\src\\ucf101_captions.csv",
+    os.path.join(_HERE, "ucf101_captions.csv"),
     index=False
 )
 
@@ -50,7 +52,7 @@ print(ucf_df[['video_id','caption','category']].head(10).to_string())
 print("\n🔵 Merging MSR-VTT + UCF101...")
 
 msrvtt_df = pd.read_csv(
-    "C:\\Users\\vijay\\OneDrive\\Desktop\\anime-project\\src\\merged_data.csv"
+    os.path.join(_HERE, "merged_data.csv")
 )
 
 # Keep only needed columns
@@ -64,7 +66,7 @@ ucf_small['source'] = 'ucf101'
 # Combine
 combined_df = pd.concat([msrvtt_df, ucf_small], ignore_index=True)
 combined_df.to_csv(
-    "C:\\Users\\vijay\\OneDrive\\Desktop\\anime-project\\src\\combined_data.csv",
+    os.path.join(_HERE, "combined_data.csv"),
     index=False
 )
 
@@ -79,7 +81,7 @@ captions   = combined_df['caption'].tolist()
 embeddings = model.encode(captions, show_progress_bar=True,
                           batch_size=64)
 np.save(
-    "C:\\Users\\vijay\\OneDrive\\Desktop\\anime-project\\src\\combined_embeddings.npy",
+    os.path.join(_HERE, "combined_embeddings.npy"),
     embeddings
 )
 

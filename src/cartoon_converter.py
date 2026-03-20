@@ -3,10 +3,12 @@ import os
 import subprocess
 import numpy as np
 
-# Paths
-TEMP_PATH   = "C:\\Users\\vijay\\OneDrive\\Desktop\\anime-project\\temp"
-OUTPUT_PATH = "C:\\Users\\vijay\\OneDrive\\Desktop\\anime-project\\output"
-FFMPEG_PATH = "C:\\ffmpeg\\ffmpeg-8.0.1-essentials_build\\bin\\ffmpeg.exe"
+# Paths — resolved dynamically so this works on any machine
+_HERE       = os.path.dirname(os.path.abspath(__file__))   # src/
+_BASE       = os.path.dirname(_HERE)                        # project root
+TEMP_PATH   = os.path.join(_BASE, "temp")
+OUTPUT_PATH = os.path.join(_BASE, "output")
+FFMPEG_PATH = os.environ.get("FFMPEG_PATH", "ffmpeg")      # set env var or use system PATH
 
 # HIGH QUALITY cartoon effect
 def apply_cartoon_effect(frame):

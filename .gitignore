@@ -102,12 +102,24 @@ venv.bak/
 # mypy
 .mypy_cache/
 
-# Project Specific
+# Project Specific — Large files excluded from GitHub
+# ─────────────────────────────────────────────────────────────
+# temp/ and output/ are runtime directories created automatically
 temp/
 output/
+
+# Dataset videos (GBs in size — download separately, see README)
 datasets-project/
+
+# Model weights (download separately)
 models/
+
+# Pre-built indexes (too large for GitHub — download from Google Drive link in README)
 *.npy
 *.index
+
+# Raw CSVs (regenerated from datasets — download pre-built versions from README link)
 *.csv
+
+# Static generated files
 static/processed/
